@@ -27,7 +27,7 @@ void setup ()
 }
 public void setBombs()
 {
-    for(int i = 0; i < 100; i++) {
+    for(int i = 0; i < 40; i++) {
         int row = (int)(Math.random()*20);
         int col = (int)(Math.random()*20);
         if(!bombs.contains(buttons[row][col])){
@@ -45,16 +45,30 @@ public void draw ()
 }
 public boolean isWon()
 {
-    //your code here
-    return false;
+    for(int row = 0; row < NUM_ROWS; row++){
+        for(int col = 0; col < NUM_COLS; col++){
+            if(!bombs.contains(buttons[row][col]) && !buttons[row][col].isClicked()){
+                return false;
+            }
+        }
+    }
+    return true;
 }
 public void displayLosingMessage()
 {
-    //your code here
+    for(int r = 0; r < NUM_ROWS; r++){
+        for(int c = 0; c < NUM_COLS; c++){
+            buttons[r][c].setLabel("L");
+        }
+    }
 }
 public void displayWinningMessage()
 {
-    //your code here
+    for(int r = 0; r < NUM_ROWS; r++){
+        for(int c = 0; c < NUM_COLS; c++){
+            buttons[r][c].setLabel("W");
+        }
+    }
 }
 
 public class MSButton
@@ -84,12 +98,31 @@ public class MSButton
     public boolean isClicked()
     {
         return clicked;
-        //your code here
     }
 
     public void mousePressed()
     {
         clicked = true;
+        if(mouseButton == RIGHT){
+            marked = !marked;
+        }
+        else if(bombs.contains(this)){
+            displayLosingMessage();
+        }
+        else if(countBombs(r,c) > 0){
+            label = "" + countBombs(r,c);
+        }
+        else {
+            for(int a = -1; a<2; a++){
+                for(int b = -1; b<2; b++){
+                    if(isValid(r+a,c+b)){
+                        if(buttons[r+a][c+b].isClicked() == false){
+                            buttons[r+a][c+b].mousePressed();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void draw () 
@@ -113,13 +146,18 @@ public class MSButton
     }
     public boolean isValid(int r, int c)
     {
-        //your code here
-        return false;
+        return (r<NUM_ROWS && r>=0) && (c<NUM_COLS && c>=0);
     }
     public int countBombs(int row, int col)
     {
         int numBombs = 0;
-        //your code here
+        for(int r = -1; r < 2; r++){
+            for(int c = -1; c < 2; c++){
+                if(isValid(row+r,col+c) && bombs.contains(buttons[row+r][col+c])){
+                    numBombs++;
+                }
+            }
+        }
         return numBombs;
     }
 }
