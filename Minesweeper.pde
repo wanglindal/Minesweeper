@@ -102,7 +102,9 @@ public class MSButton
 
     public void mousePressed()
     {
-        clicked = true;
+        if(mouseButton == LEFT){
+            clicked = true;
+        }
         if(mouseButton == RIGHT){
             marked = !marked;
         }
