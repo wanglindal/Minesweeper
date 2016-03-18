@@ -83,6 +83,32 @@ public class MSButton
     public void mousePressed () 
     {
         clicked = true;
+        if(keyPressed)
+        { marked= !marked; }
+        else if(bombs.contains(this))
+        { 
+            displayLosingMessage();
+        }
+        else if(countBombs(r,c)>0)
+        {
+            label = "" + countBombs(r,c);
+        }
+        else 
+        {
+               if(marked == true)
+        {
+          marked = false;
+          if(isValid(r,c-1) && buttons[r][c-1].isMarked())
+            buttons[r][c-1].mousePressed();
+          if(isValid(r,c+1) && buttons[r][c+1].isMarked())
+          buttons[r][c+1].mousePressed();
+          if(isValid(r-1,c) && buttons[r-1][c].isMarked())
+          buttons[r-1][c].mousePressed();
+          if(isValid(r+1,c) && buttons[r+1][c].isMarked())
+          buttons[r+1][c].mousePressed();
+        }
+        }    
+        
         //your code here
     }
 
@@ -117,7 +143,7 @@ public class MSButton
     }
     public int countBombs(int row, int col)
     {
-        int numBombs = 0;
+        int numsBombs = 0;
         //your code here
         if(isValid(row-1,col)&& bombs.contains(buttons[row-1][col]))//top
             { numsBombs++;}
@@ -129,9 +155,19 @@ public class MSButton
             { numsBombs++;}
         if(isValid(row+1,col)&& bombs.contains(buttons[row+1][col]))//bottom
             { numsBombs++;}
-        return numBombs;
+       if(isValid(row+1, col-1)&& bombs.contains(buttons[row+1][col-1]))//bottom, left
+           { numsBombs++;}
+        if(isValid(row ,  col-1)&& bombs.contains(buttons[row][col-1]))// left
+           { numsBombs++;}
+        if(isValid(row-1, col-1)&& bombs.contains(buttons[row-1][col-1]))//top, left
+           { numsBombs++;}
+        return numsBombs;
     }
 }
+
+
+
+
 
 
 
