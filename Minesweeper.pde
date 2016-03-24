@@ -20,9 +20,9 @@ void setup ()
 }
 public void setBombs()
 {
-    for(int b=0 ; b<35; b++)
+    for(int b=0 ; b<40; b++)
     {
-   int row= (int) (Math.random()*NUM_ROWS);
+   int row= (int)(Math.random()*NUM_ROWS);
    int col = (int)(Math.random()*NUM_COLS);
    if(!bombs.contains(buttons[row][col]))
    { 
@@ -88,6 +88,7 @@ public class MSButton
         else if(bombs.contains(this))
         { 
             displayLosingMessage();
+           
         }
         else if(countBombs(r,c)>0)
         {
@@ -95,24 +96,23 @@ public class MSButton
         }
         else 
         {
-               if(marked == true)
-        {
-          marked = false;
-          if(isValid(r,c-1) && buttons[r][c-1].isMarked())
-            buttons[r][c-1].mousePressed();
-          if(isValid(r,c+1) && buttons[r][c+1].isMarked())
-          buttons[r][c+1].mousePressed();
-          if(isValid(r-1,c) && buttons[r-1][c].isMarked())
-          buttons[r-1][c].mousePressed();
-          if(isValid(r+1,c) && buttons[r+1][c].isMarked())
-          buttons[r+1][c].mousePressed();
+            for(int b = -1; b<2; b++)
+            {
+                for(int a = -1; a<2; a++)
+                {
+                    if(isValid(r+a,c+b)&&buttons[r+a][c+b].isClicked() == false)
+                    {
+                        {
+                            buttons[r+a][c+b].mousePressed();
+                        }
+                    }
+                }
+            }
         }
-        }    
-        
-        //your code here
     }
+   
 
-    public void draw () 
+ public void draw () 
     {    
         if (marked)
             fill(0);
@@ -134,7 +134,7 @@ public class MSButton
     public boolean isValid(int r, int c)
     {
         //your code here
-        if(r>=0 && c>=0 && r<=NUM_ROWS && c<=NUM_COLS  )
+        if(r>=0 && c>=0 && r<NUM_ROWS && c<NUM_COLS  )
             { return true;}
         else  {
            return false; 
@@ -163,11 +163,7 @@ public class MSButton
            { numsBombs++;}
         return numsBombs;
     }
+
 }
-
-
-
-
-
 
 
