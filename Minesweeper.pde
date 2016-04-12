@@ -3,6 +3,8 @@ private int NUM_ROWS = 20;
 private int NUM_COLS = 20; //Declare and initialize NUM_ROWS and NUM_COLS = 20
 private MSButton[][] buttons; //2d array of minesweeper buttons
 private ArrayList <MSButton> bombs = new ArrayList <MSButton> (); //ArrayList of just the minesweeper buttons that are mined
+private String message;
+private boolean gameover= false; 
 void setup ()
 {
     size(400, 400);
@@ -39,15 +41,42 @@ public void draw ()
 }
 public boolean isWon()
 {
-    //your code here
-    return false;
+     for(int r = 0; r < NUM_ROWS; r++)
+     {
+        for(int c = 0; c < NUM_COLS; c++)
+        {
+            if(!buttons[r][c].isMarked() && !buttons[r][c].isClicked())
+            {    
+                return false;
+            }
+        }
+    }//your code here
+    return true;
 }
 public void displayLosingMessage()
-{
-    //your code here
+{   message= " YOU LOSE " ; 
+    gameover = true;
+    for(int row=0; row<NUM_ROWS; row++){
+      for(int col=0; col<NUM_COLS; col++){
+        if(bombs.contains(buttons[row][col])){
+          buttons[row][col].setLabel("B");
+          
+          bombs.remove(buttons[row][col]);
+        }
+      }
+    }
+       
+    for (int i = 0; i <= message.length(); i++)
+        buttons[10][i + 6].setLabel(""+message.charAt(i));//your code here
 }
 public void displayWinningMessage()
 {
+    message = " YOU WIN!!! :)"; 
+    for(int row=0; row<NUM_ROWS; row++)
+      for(int col=0; col<NUM_COLS; col++)
+        bombs.remove(buttons[row][col]);
+    for (int i = 0; i <= message.length(); i++)
+        buttons[10][i + 6].setLabel(""+message.charAt(i));
     //your code here
 }
 
@@ -82,7 +111,10 @@ public class MSButton
     
     public void mousePressed () 
     {
-        clicked = true;
+        if(mouseButton == LEFT && gameover == false && isMarked() == false)
+            {clicked = true;}
+        if(mouseButton == RIGHT && gameover == false && isClicked() == false)
+            {marked = !marked; }
         if(keyPressed)
         { marked= !marked; }
         else if(bombs.contains(this))
